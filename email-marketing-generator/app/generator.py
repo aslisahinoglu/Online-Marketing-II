@@ -1,10 +1,11 @@
 import os
-import openai
 from dotenv import load_dotenv
+from openai import OpenAI
 
 # .env laden und API-Key setzen
 load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# Client mit API-Key initialisieren
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def generate_email_prompt(product, target_audience, tone, language, call_to_action):
     return f"""
@@ -28,14 +29,14 @@ def generate_email_prompt(product, target_audience, tone, language, call_to_acti
 def generate_email(product, target_audience, tone, language, call_to_action):
     prompt = generate_email_prompt(product, target_audience, tone, language, call_to_action)
 
-    response = openai.ChatCompletion.create(
-        model="gpt-4",
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
         messages=[{"role": "user", "content": prompt}],
         temperature=0.7,
         max_tokens=700
     )
 
-    return response["choices"][0]["message"]["content"]
+    return response.choices[0].message.content
 
 def generate_image_prompt(product, target_audience):
     return f"Erstelle einen Bild-Prompt für ein Produktfoto von {product['name']} für die Zielgruppe {target_audience}."
