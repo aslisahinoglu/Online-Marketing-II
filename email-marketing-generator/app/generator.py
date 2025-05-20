@@ -1,14 +1,8 @@
-from dotenv import load_dotenv
 import os
 import openai
-
-load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
-
-import openai
-import os
 from dotenv import load_dotenv
 
+# .env laden und API-Key setzen
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
@@ -42,3 +36,6 @@ def generate_email(product, target_audience, tone, language, call_to_action):
     )
 
     return response["choices"][0]["message"]["content"]
+
+def generate_image_prompt(product, target_audience):
+    return f"Erstelle einen Bild-Prompt für ein Produktfoto von {product['name']} für die Zielgruppe {target_audience}."
