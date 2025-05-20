@@ -2,6 +2,8 @@ import streamlit as st
 from app.generator import generate_email
 from app.data import products
 from app.utils import tonalitaets_feedback
+from datetime import datetime
+import re
 
 st.title("📧 Personalized Email Generator")
 
@@ -28,10 +30,22 @@ if st.session_state.result:
 
     st.text_area("E-Mail Text zum Kopieren", value=st.session_state.result, height=300)
 
-    if st.button("Als Text speichern"):
-        with open("generated_email.txt", "w") as f:
-            f.write(st.session_state.result)
-        st.success("E-Mail als Text gespeichert!")
+    # Subject line extrahieren
+    match = re.search(r"Subject Line:\s*(.+)", st.session_state.result)
+    subject_line = match.group(1).strip() if match else "email"
+
+    # Dateiname mit Datum und Subject
+    date_str = datetime.now().strftime("%Y-%m-%d")
+    filename = f"{date_str}_{subject_line}.txt"
+    # Dateiname safe machen (keine Sonderzeichen)
+    filename = re.sub(r'[\\/*?:"<>|]', "", filename)
+
+    st.download_button(
+        label="Als Text herunterladen",
+        data=st.session_state.result,
+        file_name=filename,
+        mime="text/plain"
+    )
 
 if st.button("A/B Test generieren"):
     email_a = generate_email(product, target, "locker", language, cta)
