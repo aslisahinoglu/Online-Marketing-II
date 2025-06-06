@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\aslis\Online-Marketing-II\email-marketing-generator\env
+set VIRTUAL_ENV=C:\OMM HdM\OMM SS 25\Gen AI Web Analytics\Mail Marketing Generator\Online-Marketing-II\email-marketing-generator\env
 
 if not defined PROMPT set PROMPT=$P$G
 
@@ -25,7 +25,6 @@ if defined _OLD_VIRTUAL_PATH set PATH=%_OLD_VIRTUAL_PATH%
 if not defined _OLD_VIRTUAL_PATH set _OLD_VIRTUAL_PATH=%PATH%
 
 set PATH=%VIRTUAL_ENV%\Scripts;%PATH%
-set VIRTUAL_ENV_PROMPT=(env) 
 
 :END
 if defined _OLD_CODEPAGE (

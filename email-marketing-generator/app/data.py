@@ -7,5 +7,8 @@ products = {
         "name": "MindfulFocus Aroma Spray",
         "description": "Ätherisches Öl-Spray für Meditation & Konzentration. Lavendel & Pfefferminze, hergestellt in Deutschland."
     },
-    # weitere Produkte hier ergänzen
+    "HYDRAFLOW Trinkflasche": {
+            "name": "HYDRAFLOW Trinkflasche",
+            "description": "Stylische, doppelwandige Edelstahlflasche (500ml). Hält Getränke 12h heiß & 24h kalt. BPA-frei & auslaufsicher."
+  }
 }
