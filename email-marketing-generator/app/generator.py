@@ -57,4 +57,33 @@ def generate_email(product, target_audience, tone, language, call_to_action):
     return response.choices[0].message.content
 
 def generate_image_prompt(product, target_audience):
-    return f"Erstelle einen Bild-Prompt für ein Produktfoto von {product['name']} für die Zielgruppe {target_audience}."
+    product_context = {
+        "ZENLYFE Eco Yoga Mat": "ausgerollt auf einem hellen Holzfußboden in einem modernen Wohnzimmer oder Yoga-Studio mit Pflanzen im Hintergrund",
+        "MindfulFocus Aroma Spray": "stehend auf einem schlichten Nachttisch oder Meditationsaltar aus Holz, umgeben von Leinen, Kerze und Buch",
+        "ZENLYFE Glas Trinkflasche": "stehend auf einem Schreibtisch mit Notizbuch und Laptop oder in einer Yoga-Tasche neben der Matte, natürliche Szene"
+    }
+
+    product_scene = product_context.get(product["name"], "natürliche Szene mit authentischem Anwendungskontext")
+
+    return f"""
+Generiere ein fotorealistisches Produktfoto von {product['name']} basierend auf dieser Beschreibung: {product['description']}. 
+
+Das Bild soll im Stil moderner Lifestyle-Fotografie gestaltet sein und folgende Kriterien erfüllen:
+
+Ziel: Hochwertige Darstellung im realistischen Nutzungskontext für die Zielgruppe: {target_audience}
+
+Stilrichtlinien (ZENLYFE Marke):
+Minimalistisch, achtsam, ruhig
+Farbpalette: Naturtöne (weiß, beige, salbei, terracotta)
+Materialität: Holz, Leinen, Keramik, Glas, keine Plastik-Elemente
+Keine Texte, keine Logos, keine Menschen
+
+Bildkomposition:
+Perspektive: Eye-Level oder leicht erhöht
+Kamera: DSLR, natürliche Unschärfe im Hintergrund
+Licht: Tageslicht
+Format: Vertikal (4:5)  
+
+Anwendungskontext:
+{product_scene}
+""".strip()

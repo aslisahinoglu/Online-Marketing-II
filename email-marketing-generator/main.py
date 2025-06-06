@@ -5,7 +5,24 @@ from app.utils import tonalitaets_feedback
 from datetime import datetime
 import re
 
-st.title("📧 Personalized Email Generator")
+# Konfiguration der Seite MUSS als erstes kommen
+st.set_page_config(
+    page_title="E-Mail Generator",
+    page_icon="📧",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+# CSS einbinden
+def load_css():
+    with open("static/stil.css") as f:
+        return f'<style>{f.read()}</style>'
+st.markdown(load_css(), unsafe_allow_html=True)
+
+# Wrapper-Div für Hintergrund und Styling starten
+st.markdown('<div class="stApp">', unsafe_allow_html=True)
+
+st.title("ZENLYFE E-Mail Generator")
 
 product_name = st.selectbox("Produkt auswählen", list(products.keys()))
 product = products[product_name]
@@ -24,9 +41,6 @@ if st.button("E-Mail generieren"):
 if st.session_state.result:
     st.markdown("### ✉️ Ergebnis:")
     st.code(st.session_state.result, language="markdown")
-
-    feedback = tonalitaets_feedback(st.session_state.result)
-    st.write("Ton-Feedback:", feedback)
 
     st.text_area("E-Mail Text zum Kopieren", value=st.session_state.result, height=300)
 
@@ -48,11 +62,20 @@ if st.session_state.result:
     )
 
 if st.button("A/B Test generieren"):
-    email_a = generate_email(product, target, "locker", language, cta)
-    email_b = generate_email(product, target, "förmlich", language, cta)
-    st.markdown("### Variante A (locker)")
+    # Bestimme den zweiten Ton, der mit dem ausgewählten verglichen wird
+    if tone == "locker":
+        tone_alt = "neutral"
+    elif tone == "neutral":
+        tone_alt = "förmlich"
+    else:  # förmlich
+        tone_alt = "locker"
+
+    email_a = generate_email(product, target, tone, language, cta)
+    email_b = generate_email(product, target, tone_alt, language, cta)
+
+    st.markdown(f"### Variante A ({tone})")
     st.code(email_a)
-    st.markdown("### Variante B (förmlich)")
+    st.markdown(f"### Variante B ({tone_alt})")
     st.code(email_b)
 
 from app.generator import generate_image_prompt
@@ -61,3 +84,6 @@ if st.button("Bild-Prompt generieren"):
     image_prompt = generate_image_prompt(product, target)
     st.markdown("### 🖼️ Bild-Prompt")
     st.code(image_prompt)
+
+# Wrapper-Div schließen
+st.markdown('</div>', unsafe_allow_html=True)
