@@ -62,21 +62,22 @@ if st.session_state.result:
     )
 
 if st.button("A/B Test generieren"):
-    # Bestimme den zweiten Ton, der mit dem ausgewählten verglichen wird
-    if tone == "locker":
-        tone_alt = "neutral"
-    elif tone == "neutral":
-        tone_alt = "förmlich"
-    else:  # förmlich
-        tone_alt = "locker"
+    if st.session_state.result and "Variante B" not in st.session_state:
+        email_a = st.session_state.result
+    else:
+        email_a = generate_email(product, target, tone, language, cta, version="v1")
 
-    email_a = generate_email(product, target, tone, language, cta)
-    email_b = generate_email(product, target, tone_alt, language, cta)
+    email_b = generate_email(product, target, tone, language, cta, version="v2")
 
-    st.markdown(f"### Variante A ({tone})")
+    st.session_state.ab_test_a = email_a
+    st.session_state.ab_test_b = email_b
+
+    st.markdown(f"### Variante A ({tone} – Version 1)")
     st.code(email_a)
-    st.markdown(f"### Variante B ({tone_alt})")
-    st.code(email_b)
+
+    st.markdown(f"### Variante B ({tone} – Version 2)")
+    st.code(email_b) 
+
 
 from app.generator import generate_image_prompt
 
